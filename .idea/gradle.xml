@@ -9,6 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/spotify-app-remote" />
+            <option value="$PROJECT_DIR$/spotify-app-remote-release-0.6.0" />
+            <option value="$PROJECT_DIR$/spotifyremote" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
