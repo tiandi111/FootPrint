@@ -45,7 +45,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#ff0000"
+        "color": "#9e9e9e"
       }
     ]
   },
@@ -62,7 +62,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#cecece"
+        "color": "#bdbdbd"
       }
     ]
   },
@@ -152,7 +152,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#808080"
+        "color": "#616161"
       }
     ]
   },
@@ -179,7 +179,7 @@
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#ffeb3b"
+        "color": "#00ec00"
       },
       {
         "weight": 2.5
