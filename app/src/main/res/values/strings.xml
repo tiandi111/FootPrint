@@ -6,4 +6,7 @@
     <string name="hybrid_map">hybrid_map</string>
     <string name="normal_map">normal_map</string>
     <string name="dropped_pin">x</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
