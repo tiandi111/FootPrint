@@ -1,25 +1,26 @@
 package com.example.lockdown;
 
 import android.content.Context;
-import android.location.Address;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link music.OnFragmentInteractionListener} interface
+ * {@link EditFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link music#newInstance} factory method to
+ * Use the {@link EditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class music extends Fragment {
+public class EditFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ADD_DEFAULT = "WTF?!";
@@ -29,7 +30,7 @@ public class music extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public music() {
+    public EditFragment() {
         // Required empty public constructor
     }
 
@@ -37,13 +38,11 @@ public class music extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment music.
+     * @param ADDRESS ADD_DEFAULT.
+     * @return A new instance of fragment EditFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static music newInstance(String add) {
-        music fragment = new music();
+    public static EditFragment newInstance(String add) {
+        EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
         args.putString(ADD_DEFAULT, add);
         fragment.setArguments(args);
@@ -61,14 +60,14 @@ public class music extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_music, container, false);
         TextView Address= view.findViewById(R.id.Address);
         Address.setText(ADDRESS);
+        final Button button_edit = view.findViewById(R.id.button_manage);
+        button_edit.setOnClickListener(this);
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -90,6 +89,20 @@ public class music extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_manage:
+                Intent intent = new Intent(getActivity(), FootPrintActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.button_share:
+                break;
+            case R.id.button_save:
+                break;
+        }
     }
 
     /**
