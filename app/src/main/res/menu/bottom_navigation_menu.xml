@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_songs"
+        android:id="@+id/navigation_map"
         android:icon="@drawable/spotify_logo"
-        android:title="Songs"/>
+        android:enabled="true"
+        android:title="Map"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/navigation_albums"
+        android:id="@+id/navigation_explore"
         android:icon="@drawable/spotify_logo"
-        android:title="Albums"/>
+        android:enabled="true"
+        android:title="Explore"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/navigation_artists"
+        android:id="@+id/navigation_yourfootprint"
         android:icon="@drawable/spotify_logo"
-        android:title="Artists"/>
+        android:enabled="true"
+        android:title="Your footprint"
+        app:showAsAction="ifRoom" />
 
 </menu>

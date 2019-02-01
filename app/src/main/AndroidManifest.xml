@@ -38,11 +38,15 @@
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MusicActivity"></activity>
+
+        <activity
+            android:name=".ManageActivity"
+            android:label="@string/title_activity_management">
+
+        </activity>
     </application>
 
 </manifest>

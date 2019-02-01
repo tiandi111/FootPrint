@@ -15,12 +15,12 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditFragment.OnFragmentInteractionListener} interface
+ * {@link AddFPFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditFragment#newInstance} factory method to
+ * Use the {@link AddFPFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditFragment extends Fragment implements View.OnClickListener {
+public class AddFPFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ADD_DEFAULT = "WTF?!";
@@ -30,7 +30,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
-    public EditFragment() {
+    public AddFPFragment() {
         // Required empty public constructor
     }
 
@@ -39,10 +39,10 @@ public class EditFragment extends Fragment implements View.OnClickListener {
      * this fragment using the provided parameters.
      *
      * @param ADDRESS ADD_DEFAULT.
-     * @return A new instance of fragment EditFragment.
+     * @return A new instance of fragment AddFPFragment.
      */
-    public static EditFragment newInstance(String add) {
-        EditFragment fragment = new EditFragment();
+    public static AddFPFragment newInstance(String add) {
+        AddFPFragment fragment = new AddFPFragment();
         Bundle args = new Bundle();
         args.putString(ADD_DEFAULT, add);
         fragment.setArguments(args);
@@ -63,7 +63,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_music, container, false);
         TextView Address= view.findViewById(R.id.Address);
         Address.setText(ADDRESS);
-        final Button button_edit = view.findViewById(R.id.button_manage);
+        final Button button_edit = view.findViewById(R.id.button_add);
         button_edit.setOnClickListener(this);
         return view;
     }
@@ -94,8 +94,8 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_manage:
-                Intent intent = new Intent(getActivity(), FootPrintActivity.class);
+            case R.id.button_add:
+                Intent intent = new Intent(getActivity(), ManageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.button_share:

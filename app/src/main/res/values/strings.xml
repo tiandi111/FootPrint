@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">LockDown</string>
+    <string name="title_activity_management">FootPrint</string>
     <string name="title_activity_maps">Map</string>
     <string name="satellite_map">satellite_map</string>
     <string name="terrain_map">terrain_map</string>
