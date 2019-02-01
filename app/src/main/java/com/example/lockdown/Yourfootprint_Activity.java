@@ -5,12 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.TextView;
 
-public class ManageActivity extends AppCompatActivity {
+public class Yourfootprint_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +23,7 @@ public class ManageActivity extends AppCompatActivity {
 
     // Set bottom navigation bar
     private void bottom_nav_init() {
-        Intent intent_toMap = new Intent(ManageActivity.this, MapsActivity.class);
+        Intent intent_toMap = new Intent(Yourfootprint_Activity.this, Maps_Activity.class);
         BottomNavigationView bottomNV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

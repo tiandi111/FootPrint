@@ -15,15 +15,11 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.lockdown.Service.LocationMonitoringService;
-import com.google.android.gms.location.LocationServices;
+import com.example.lockdown.Service.LocationMonitoring_Service;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,7 +29,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
-import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -45,7 +40,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 import java.util.Locale;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, AddFPFragment.OnFragmentInteractionListener{
+public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener{
 
     private GoogleMap mMap;
     private SpotifyAppRemote mSpotifyAppRemote;
@@ -73,7 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         bottom_navigation_init();
 
-        LocationMonitoringService_init(MapsActivity.this);
+        LocationMonitoringService_init(Maps_Activity.this);
     }
 
     @Override
@@ -171,7 +166,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onFragmentInteraction(Uri uri) { }
 
     public void LocationMonitoringService_init(Context context) {
-        Intent intent = new Intent(context, LocationMonitoringService.class);
+        Intent intent = new Intent(context, LocationMonitoring_Service.class);
         startService(intent);
     }
 
@@ -210,20 +205,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                         mSpotifyAppRemote = spotifyAppRemote;
-                        Log.d("ManageActivity", "Connected! Yay!");
+                        Log.d("Yourfootprint_Activity", "Connected! Yay!");
                         // Do what we want spotify to do after connecting
                         connected();
                     }
 
                     @Override
                     public void onFailure(Throwable throwable) {
-                        Log.e("ManageActivity", throwable.getMessage()+"错误", throwable);
+                        Log.e("Yourfootprint_Activity", throwable.getMessage()+"错误", throwable);
                     }
                 });
     }
 
     private void bottom_navigation_init() {
-        Intent intent_tomanage = new Intent(MapsActivity.this, ManageActivity.class);
+        Intent intent_tomanage = new Intent(Maps_Activity.this, Yourfootprint_Activity.class);
         BottomNavigationView bottomNV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -264,7 +259,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setEventCallback(playerState -> {
                     final Track track = playerState.track;
                     if (track != null) {
-                        Log.d("ManageActivity", track.name + " by " + track.artist.name);
+                        Log.d("Yourfootprint_Activity", track.name + " by " + track.artist.name);
                     }
                 });
     }
@@ -285,7 +280,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                AddFPFragment fragment = AddFPFragment.newInstance(snippet);
+                Addfootprint_Fragment fragment = Addfootprint_Fragment.newInstance(snippet);
                 fragmentTransaction.add(R.id.map, fragment);
                 fragmentTransaction.commit();
                 //startActivity(intent);

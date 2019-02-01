@@ -11,18 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.lockdown.Service.LocationMonitoringService;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddFPFragment.OnFragmentInteractionListener} interface
+ * {@link Addfootprint_Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddFPFragment#newInstance} factory method to
+ * Use the {@link Addfootprint_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddFPFragment extends Fragment implements View.OnClickListener {
+public class Addfootprint_Fragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ADD_DEFAULT = "WTF?!";
@@ -32,7 +30,7 @@ public class AddFPFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
-    public AddFPFragment() {
+    public Addfootprint_Fragment() {
         // Required empty public constructor
     }
 
@@ -41,10 +39,10 @@ public class AddFPFragment extends Fragment implements View.OnClickListener {
      * this fragment using the provided parameters.
      *
      * @param ADDRESS ADD_DEFAULT.
-     * @return A new instance of fragment AddFPFragment.
+     * @return A new instance of fragment Addfootprint_Fragment.
      */
-    public static AddFPFragment newInstance(String add) {
-        AddFPFragment fragment = new AddFPFragment();
+    public static Addfootprint_Fragment newInstance(String add) {
+        Addfootprint_Fragment fragment = new Addfootprint_Fragment();
         Bundle args = new Bundle();
         args.putString(ADD_DEFAULT, add);
         fragment.setArguments(args);
@@ -97,7 +95,7 @@ public class AddFPFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_add:
-                Intent intent = new Intent(getActivity(), ManageActivity.class);
+                Intent intent = new Intent(getActivity(), Yourfootprint_Activity.class);
                 startActivity(intent);
                 break;
             case R.id.button_share:

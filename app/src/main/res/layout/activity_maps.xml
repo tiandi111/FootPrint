@@ -6,7 +6,7 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsActivity">
+    tools:context=".Maps_Activity">
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,4 +26,5 @@
 
     </android.support.design.widget.CoordinatorLayout>
 </fragment>
+
 

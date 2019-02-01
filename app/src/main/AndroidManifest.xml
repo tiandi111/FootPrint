@@ -34,7 +34,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Maps_Activity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,10 +43,15 @@
         </activity>
 
         <activity
-            android:name=".ManageActivity"
+            android:name=".Yourfootprint_Activity"
             android:label="@string/title_activity_management">
-
         </activity>
+
+        <service
+            android:name=".Service.LocationMonitoring_Service"
+            android:exported="false">
+        </service>
+
     </application>
 
 </manifest>
