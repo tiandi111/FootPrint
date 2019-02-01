@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.lockdown.Service.LocationMonitoringService;
+
 
 /**
  * A simple {@link Fragment} subclass.

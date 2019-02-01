@@ -1,6 +1,7 @@
 package com.example.lockdown;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -21,6 +22,8 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lockdown.Service.LocationMonitoringService;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +33,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -44,66 +48,32 @@ import java.util.Locale;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, AddFPFragment.OnFragmentInteractionListener{
 
     private GoogleMap mMap;
+    private SpotifyAppRemote mSpotifyAppRemote;
     private float zoom = 15;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "954bf3f438c04897af73f0209a741c8a";
     private static final String REDIRECT_URI = "testschema://callback";
-    private SpotifyAppRemote mSpotifyAppRemote;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+
         setContentView(R.layout.activity_maps);
 
-        // Set title
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
-        TextView tv = (TextView) findViewById(R.id.title);
-        tv.setText("Map");
+        customizedTitle_init();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        setGoogleMapFragment();
 
-        // Authentication for multiple scopes
-        AuthenticationRequest.Builder builder =
-                new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
+        AuthenticationForSpotify();
 
-        builder.setScopes(new String[]{"streaming"});
-        AuthenticationRequest request = builder.build();
+        ConnectToSpotify();
 
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        bottom_navigation_init();
 
-        // Built-in Authentication with connection
-        ConnectionParams connectionParams =
-                new ConnectionParams.Builder(CLIENT_ID)
-                        .setRedirectUri(REDIRECT_URI)
-                        .showAuthView(true)
-                        .build();
-        SpotifyAppRemote.connect(this, connectionParams,
-                new Connector.ConnectionListener() {
-
-                    @Override
-                    public void onConnected(SpotifyAppRemote spotifyAppRemote) {
-                        mSpotifyAppRemote = spotifyAppRemote;
-                        Log.d("ManageActivity", "Connected! Yay!");
-
-                        // Now you can start interacting with App Remote
-                        connected();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        Log.e("ManageActivity", throwable.getMessage()+"错误", throwable);
-                        // Something went wrong when attempting to connect! Handle errors here
-                    }
-                });
-
-        bottom_nav_init();
+        LocationMonitoringService_init(MapsActivity.this);
     }
 
     @Override
@@ -141,34 +111,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onStop() {
         super.onStop();
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.map_options, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Change the map type based on the user's selection.
-        switch (item.getItemId()) {
-            case R.id.normal_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                return true;
-            case R.id.hybrid_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                return true;
-            case R.id.satellite_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                return true;
-            case R.id.terrain_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /**
@@ -228,7 +170,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onFragmentInteraction(Uri uri) { }
 
-    private void bottom_nav_init() {
+    public void LocationMonitoringService_init(Context context) {
+        Intent intent = new Intent(context, LocationMonitoringService.class);
+        startService(intent);
+    }
+
+    private void customizedTitle_init() {
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
+        TextView tv = (TextView) findViewById(R.id.title);
+        tv.setText("Map");
+    }
+
+    private void setGoogleMapFragment(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void AuthenticationForSpotify() {
+        AuthenticationRequest.Builder builder =
+                new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
+
+        builder.setScopes(new String[]{"streaming"});
+        AuthenticationRequest request = builder.build();
+
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+    }
+
+    private void ConnectToSpotify() {
+        ConnectionParams connectionParams =
+                new ConnectionParams.Builder(CLIENT_ID)
+                        .setRedirectUri(REDIRECT_URI)
+                        .showAuthView(true)
+                        .build();
+
+        SpotifyAppRemote.connect(this, connectionParams,
+                new Connector.ConnectionListener() {
+
+                    @Override
+                    public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+                        mSpotifyAppRemote = spotifyAppRemote;
+                        Log.d("ManageActivity", "Connected! Yay!");
+                        // Do what we want spotify to do after connecting
+                        connected();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Log.e("ManageActivity", throwable.getMessage()+"错误", throwable);
+                    }
+                });
+    }
+
+    private void bottom_navigation_init() {
         Intent intent_tomanage = new Intent(MapsActivity.this, ManageActivity.class);
         BottomNavigationView bottomNV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -236,8 +230,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch ( menuItem.getItemId()) {
                     case R.id.navigation_map:
-                        // no need to navigate
-                        return false;
+                        return true;
                     case R.id.navigation_explore:
                         return true;
                     case R.id.navigation_yourfootprint:
@@ -247,7 +240,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
-        bottomNV.setSelectedItemId(R.id.navigation_map);
+        //bottomNV.setSelectedItemId(R.id.navigation_map);
     }
 
     private void enableMyLocation() {
@@ -311,4 +304,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+    /**
+     * These two methods are used to set map style select menu
+     */
+    /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_options, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Change the map type based on the user's selection.
+        switch (item.getItemId()) {
+            case R.id.normal_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+            case R.id.hybrid_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                return true;
+            case R.id.satellite_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                return true;
+            case R.id.terrain_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    */
 }

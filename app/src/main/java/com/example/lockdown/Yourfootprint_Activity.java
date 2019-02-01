@@ -37,7 +37,7 @@ public class ManageActivity extends AppCompatActivity {
                     case R.id.navigation_explore:
                         return true;
                     case R.id.navigation_yourfootprint:
-                        return false;
+                        return true;
                 }
                 return false;
             }
