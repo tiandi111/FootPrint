@@ -1,6 +1,8 @@
 package com.example.lockdown;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,9 +32,6 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
 
     private OnFragmentInteractionListener mListener;
 
-    public Addfootprint_Fragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -65,6 +64,32 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
         Address.setText(ADDRESS);
         final Button button_edit = view.findViewById(R.id.button_add);
         button_edit.setOnClickListener(this);
+        //
+        Context context = this.getContext();
+        view.findViewById(R.id.button_share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new AlertDialog.Builder(context)
+                        .setTitle("You wanna share by:")
+                        .setItems(R.array.dialog_arrays,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        String[] items = getResources()
+                                                .getStringArray(
+                                                        R.array.dialog_arrays);
+                                        Toast.makeText(
+                                                context,
+                                                "You selected: " + which
+                                                        + " , " + items[which],
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }).create().show();
+            }
+        });
+
+
         return view;
     }
 
