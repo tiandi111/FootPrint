@@ -8,5 +8,5 @@ This is a personal android project supported by a software team from Texas A&M U
 **You can add your footprint simply long click on the map**<br />
 <img src="exhibition/Add%20Footprint.jpg" width="230" height="450">
 
-**Then you can add amlost everything that you think is a proper symbol to represents your memory!**<br /> 
+**Then you can add amlost everything that you like to represents your memory!**<br /> 
 <img src="exhibition/Manage%20Foortprint.jpg" width="230" height="450">
