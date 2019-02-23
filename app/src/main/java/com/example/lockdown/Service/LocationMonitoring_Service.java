@@ -67,7 +67,7 @@ public class LocationMonitoring_Service extends IntentService implements Executo
 
     public void sendPlayMusicMessage() {
         Intent localIntent = new Intent();
-        localIntent.setAction("music auto-play");
+        localIntent.setAction("Music auto-play");
         //localIntent.putExtra("data","Notice me senpai!");
         localBroadcastManager.sendBroadcast(localIntent);
         Log.d(TAG, "Auto-play!");

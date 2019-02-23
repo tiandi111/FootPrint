@@ -21,7 +21,7 @@ public class location {
     }
 
     public int computeDistanceTo(location footprint) {
-        // Get latitude and longitude of the footprint
+        // Get latitude and longitude of the Footprint
         double lat_start = rad(Lat);
         double lat_end = rad( footprint.getLat() );
         double lat_diff = lat_start - lat_end;

@@ -347,7 +347,7 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
 
     private void broadCastReciverInit( LocalBroadcastManager localBroadcastManager) {
         commonBroadCastReceiver = new CommonBroadCastReceiver();
-        IntentFilter filter = new IntentFilter("music auto-play");
+        IntentFilter filter = new IntentFilter("Music auto-play");
         //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         localBroadcastManager.registerReceiver(commonBroadCastReceiver, filter);
     }

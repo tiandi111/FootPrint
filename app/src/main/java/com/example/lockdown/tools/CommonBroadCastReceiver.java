@@ -27,7 +27,7 @@ public class CommonBroadCastReceiver extends BroadcastReceiver {
         ConnectToSpotify(context);
         if(mSpotifyAppRemote!=null) {
             mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX7K31D69s4M1");
-            Log.d(TAG, "broadcast music");
+            Log.d(TAG, "broadcast Music");
         }
         else
             Log.e(TAG, "SpotifyRemote is null");
