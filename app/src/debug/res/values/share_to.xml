@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dialog_arrays">
+        <item >Facebook</item>
+        <item >Twitter</item>
+        <item >Weibo</item>
+        <item >Weixin</item>
+    </string-array>
+
+</resources>
+
