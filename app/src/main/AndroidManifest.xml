@@ -34,8 +34,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
-            android:name=".Maps_Activity"
-            android:label="@string/title_activity_maps">
+            android:name=".Maps_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,8 +42,11 @@
         </activity>
 
         <activity
-            android:name=".Yourfootprint_Activity"
-            android:label="@string/title_activity_management">
+            android:name=".Yourfootprint_Activity">
+        </activity>
+
+        <activity
+            android:name=".Yourfootprint_Index">
         </activity>
 
         <service

@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:gravity="center_horizontal"
-            android:text="Recent  footprints"
+            android:text="Gym"
             android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textSize="24sp"
             android:textStyle="bold" />
