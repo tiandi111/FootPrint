@@ -205,20 +205,20 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                         mSpotifyAppRemote = spotifyAppRemote;
-                        Log.d("Yourfootprint_Activity", "Connected! Yay!");
+                        Log.d("yourfootprint_index", "Connected! Yay!");
                         // Do what we want spotify to do after connecting
                         connected();
                     }
 
                     @Override
                     public void onFailure(Throwable throwable) {
-                        Log.e("Yourfootprint_Activity", throwable.getMessage()+"错误", throwable);
+                        Log.e("yourfootprint_index", throwable.getMessage()+"错误", throwable);
                     }
                 });
     }
 
     private void bottom_navigation_init() {
-        Intent intent_tomanage = new Intent(Maps_Activity.this, Yourfootprint_Activity.class);
+        Intent intent_toInd = new Intent(Maps_Activity.this, Yourfootprint_Index.class);
         BottomNavigationView bottomNV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -229,13 +229,13 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                     case R.id.navigation_explore:
                         return true;
                     case R.id.navigation_yourfootprint:
-                        startActivity(intent_tomanage);
+                        startActivity(intent_toInd);
                         return true;
                 }
                 return false;
             }
         });
-        //bottomNV.setSelectedItemId(R.id.navigation_map);
+        bottomNV.setSelectedItemId(R.id.navigation_map);
     }
 
     private void enableMyLocation() {
@@ -259,7 +259,7 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                 .setEventCallback(playerState -> {
                     final Track track = playerState.track;
                     if (track != null) {
-                        Log.d("Yourfootprint_Activity", track.name + " by " + track.artist.name);
+                        Log.d("yourfootprint_index", track.name + " by " + track.artist.name);
                     }
                 });
     }

@@ -16,6 +16,8 @@
         android:text="Your footprint"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp" />
 
 </android.support.constraint.ConstraintLayout>
