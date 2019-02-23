@@ -180,7 +180,6 @@
             app:itemBackground="@color/colorPrimary"
             app:menu="@menu/bottom_navigation_menu" />
 
-
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.constraint.ConstraintLayout>

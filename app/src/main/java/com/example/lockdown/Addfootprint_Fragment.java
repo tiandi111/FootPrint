@@ -1,16 +1,24 @@
 package com.example.lockdown;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,15 +32,12 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ADD_DEFAULT = "WTF?!";
-
+    Context context;
     // TODO: Rename and change types of parameters
     private String ADDRESS;
 
     private OnFragmentInteractionListener mListener;
 
-    public Addfootprint_Fragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -52,6 +57,7 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this.getContext();
         if (getArguments() != null) {
             ADDRESS = getArguments().getString(ADD_DEFAULT);
         }
@@ -65,6 +71,10 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
         Address.setText(ADDRESS);
         final Button button_edit = view.findViewById(R.id.button_add);
         button_edit.setOnClickListener(this);
+        //
+        final Button buttonShare = view.findViewById(R.id.button_share);
+        buttonShare.setOnClickListener(this);
+
         return view;
     }
 
@@ -95,10 +105,55 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_add:
-                Intent intent = new Intent(getActivity(), Yourfootprint_Activity.class);
-                startActivity(intent);
+                WindowManager mWindowManager  = (WindowManager) this.getContext().getSystemService(Context.WINDOW_SERVICE);
+                DisplayMetrics metrics = new DisplayMetrics();
+                mWindowManager.getDefaultDisplay().getMetrics(metrics);
+                int width = metrics.widthPixels;
+                int height = metrics.heightPixels;
+                final EditText addEdit = new EditText(context);
+                addEdit.setHint("Give me a name");
+                addEdit.setGravity(Gravity.CENTER);
+                addEdit.setHeight(height/15);
+                addEdit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                AlertDialog.Builder builderAdd = new AlertDialog.Builder(context);
+                builderAdd.setIcon(R.mipmap.ic_launcher) // TODO CHANGE ICON
+                        .setTitle("Add FootPrint")
+                        .setView(addEdit)
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "You cancelled your FootPrint. Q.Q", Toast.LENGTH_SHORT);
+                            }
+
+                        })
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO: jump to next activity
+                            }
+
+                        });
+                final AlertDialog dialog = builderAdd.create();
+                builderAdd.show();
+//                Button btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+//                Button btnNegative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+//                LinearLayout.LayoutParams layoutparams = (LinearLayout.LayoutParams) btnPositive.getLayoutParams();
+//                layoutparams.height = 40;
+//                btnPositive.setLayoutParams(layoutparams);
+//                btnNegative.setLayoutParams(layoutparams);
                 break;
             case R.id.button_share:
+                AlertDialog.Builder builderShare = new AlertDialog.Builder(context);
+                builderShare.setTitle("You wanna share by:")
+                        .setIcon(R.mipmap.ic_launcher) //TODO change ICON
+                        .setItems(R.array.dialog_arrays, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String[] items = getResources().getStringArray(R.array.dialog_arrays);
+                                Toast.makeText(context, "You selected: " + which
+                                                                + " , " + items[which],
+                                                        Toast.LENGTH_LONG).show();
+                                }});
+                builderShare.show();
                 break;
             case R.id.button_save:
                 break;
