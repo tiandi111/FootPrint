@@ -1,25 +1,27 @@
 package com.example.lockdown.tools;
 
+import android.location.Location;
+
 import java.lang.Math;
 
-public class item_location {
+public class location {
     private double EARTH_RADIUS = 6378.137; // Km
-
     private double Lng;
     private double Lat;
     private String Address;
+    protected Location mLastKnownLocation;
 
-    public item_location() {};
+    public location() {};
 
-    public item_location(double lat, double lng) { setLatLng(lat, lng); }
+    public location(double lat, double lng) { setLatLng(lat, lng); }
 
     public void setLatLng(double lat, double lng) {
         Lat = lat;
         Lng = lng;
     }
 
-    public int computeDistanceTo(item_location footprint) {
-        // Get latitude and longitude of the footprint
+    public int computeDistanceTo(location footprint) {
+        // Get latitude and longitude of the Footprint
         double lat_start = rad(Lat);
         double lat_end = rad( footprint.getLat() );
         double lat_diff = lat_start - lat_end;
@@ -44,8 +46,8 @@ public class item_location {
                 {64.3432, 107.333, 64.3231, 107.3331}, {30.62158, -96.34063, 30.62084, -96.34914}};
         double[] correctResult = {25, 3845, 2, 0.1};
 
-        item_location S = new item_location();
-        item_location E = new item_location();
+        location S = new location();
+        location E = new location();
 
         for(int i=0; i<testData.length; i++) {
             double[] point = testData[i];

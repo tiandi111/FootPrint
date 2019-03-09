@@ -1,10 +1,13 @@
 package com.example.lockdown;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +24,11 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.lockdown.Service.LocationMonitoring_Service;
+import com.example.lockdown.tools.CommonBroadCastReceiver;
+import com.example.lockdown.tools.FetchAddressTask;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -38,15 +48,22 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
-public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener{
+public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap;
     private SpotifyAppRemote mSpotifyAppRemote;
+    private CommonBroadCastReceiver commonBroadCastReceiver;
+    private FusedLocationProviderClient mFusedLocationClient;
+
     private float zoom = 15;
+    private static final String TAG = "Maps_Activity";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CODE = 1337;
+
     private static final String CLIENT_ID = "954bf3f438c04897af73f0209a741c8a";
     private static final String REDIRECT_URI = "testschema://callback";
 
@@ -69,6 +86,8 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
         bottom_navigation_init();
 
         LocationMonitoringService_init(Maps_Activity.this);
+
+        broadCastReciverInit( LocalBroadcastManager.getInstance(this) );
     }
 
     @Override
@@ -166,8 +185,12 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
     public void onFragmentInteraction(Uri uri) { }
 
     public void LocationMonitoringService_init(Context context) {
-        Intent intent = new Intent(context, LocationMonitoring_Service.class);
-        startService(intent);
+        if(isServiceRunning("LocationMonitoringThread")) {
+            Log.i("服务正在运行","return");
+            return;
+        }
+        Intent location_monitoring_intent = new Intent(context, LocationMonitoring_Service.class);
+        startService(location_monitoring_intent);
     }
 
     private void customizedTitle_init() {
@@ -206,6 +229,7 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                         mSpotifyAppRemote = spotifyAppRemote;
                         Log.d("yourfootprint_index", "Connected! Yay!");
+                        Log.d("SpotifyRemoteConnection", "Connected! Yay!");
                         // Do what we want spotify to do after connecting
                         connected();
                     }
@@ -213,6 +237,7 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public void onFailure(Throwable throwable) {
                         Log.e("yourfootprint_index", throwable.getMessage()+"错误", throwable);
+                        Log.e("SpotifyRemoteConnection", throwable.getMessage()+"错误", throwable);
                     }
                 });
     }
@@ -265,13 +290,25 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void setMapLongClick(final GoogleMap map) {
+//        FetchAddressTask mFetchAddressTask = new FetchAddressTask(Maps_Activity.this);
+//        mFusedLocationClient.getLastLocation()
+//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        if (location != null) {
+//                            mFetchAddressTask.execute(location);
+//                            }
+//                        }
+//                    });
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
+                //String snippet = mFetchAddressTask.getAddress();
                 String snippet = String.format(Locale.getDefault(),
                         "Lat: %1$.5f, Long: %2$.5f",
                         latLng.latitude,
                         latLng.longitude);
+
 
                 map.addMarker(new MarkerOptions()
                                 .position(latLng)
@@ -298,6 +335,23 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                 poiMarker.showInfoWindow();
             }
         });
+    }
+
+    private boolean isServiceRunning(final String className) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> info = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if (info == null || info.size() == 0) return false;
+        for (ActivityManager.RunningServiceInfo aInfo : info) {
+            if (className.equals(aInfo.service.getClassName())) return true;
+        }
+        return false;
+    }
+
+    private void broadCastReciverInit( LocalBroadcastManager localBroadcastManager) {
+        commonBroadCastReceiver = new CommonBroadCastReceiver();
+        IntentFilter filter = new IntentFilter("Music auto-play");
+        //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        localBroadcastManager.registerReceiver(commonBroadCastReceiver, filter);
     }
 
     /**
