@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">LockDown</string>
+    <string name="title_activity_management">FootPrint</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="satellite_map">satellite_map</string>
+    <string name="terrain_map">terrain_map</string>
+    <string name="hybrid_map">hybrid_map</string>
+    <string name="normal_map">normal_map</string>
+    <string name="dropped_pin">x</string>
+    <string name="address_text">"Address: %1$s \n Timestamp: %2$tr"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

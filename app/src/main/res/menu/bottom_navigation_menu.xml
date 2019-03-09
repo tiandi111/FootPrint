@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_map"
+        android:enabled="true"
+        android:icon="?attr/actionModeSelectAllDrawable"
+        android:title="Map"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_explore"
+        android:enabled="true"
+        android:icon="?android:attr/actionModeFindDrawable"
+        android:title="Explore"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_yourfootprint"
+        android:enabled="true"
+        android:icon="?android:attr/fingerprintAuthDrawable"
+        android:title="Your footprint"
+        app:showAsAction="ifRoom" />
+
+</menu>
