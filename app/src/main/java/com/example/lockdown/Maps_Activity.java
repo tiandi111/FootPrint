@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,6 +26,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.lockdown.Service.LocationMonitoring_Service;
+import com.example.lockdown.network.DownloadCallback;
 import com.example.lockdown.tools.CommonBroadCastReceiver;
 import com.example.lockdown.tools.FetchAddressTask;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,14 +55,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
-public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener {
+public class Maps_Activity extends AppCompatActivity
+        implements DownloadCallback, OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap;
+    private NetworkFragment networkFragment;
     private SpotifyAppRemote mSpotifyAppRemote;
     private CommonBroadCastReceiver commonBroadCastReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
 
     private float zoom = 15;
+    private boolean downloading = false;
+
     private static final String TAG = "Maps_Activity";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CODE = 1337;
@@ -92,6 +99,8 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
         LocationMonitoringService_init(Maps_Activity.this);
 
         broadCastReciverInit( LocalBroadcastManager.getInstance(this) );
+
+        networkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "http://3.87.45.142:8080/");
     }
 
     @Override
@@ -325,15 +334,22 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
                         latLng.latitude,
                         latLng.longitude);
 
-                if( currentMarker == null) {
-                    currentMarker = map.addMarker(new MarkerOptions()
-                                        .position(latLng)
-                                        .title(getString(R.string.dropped_pin))
-                                        .snippet(snippet));
+                if( currentMarker != null) {
+                    currentMarker.remove();
+                    currentMarker = null;
                 }
+                currentMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(getString(R.string.dropped_pin))
+                        .snippet(snippet));
 
+                if( currentFragment != null ) {
+                    getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+                    currentFragment = null;
+                }
                 currentFragment = Addfootprint_Fragment.newInstance(snippet);
                 getSupportFragmentManager().beginTransaction().add(R.id.map, currentFragment).commit();
+                startDownload();
                 //startActivity(intent);
             }
         });
@@ -366,6 +382,55 @@ public class Maps_Activity extends AppCompatActivity implements OnMapReadyCallba
         IntentFilter filter = new IntentFilter("Music auto-play");
         //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         localBroadcastManager.registerReceiver(commonBroadCastReceiver, filter);
+    }
+
+
+    // Network
+    private void startDownload() {
+        if (!downloading && networkFragment != null) {
+            // Execute the async download
+            networkFragment.startDownload();
+            downloading = true;
+        }
+    }
+
+    @Override
+    public void updateFromDownload(String result) {
+        // Update your UI here based on result of download.
+        Log.d("Message", result);
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo;
+    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch(progressCode) {
+            // You can add UI behavior for progress updates here.
+            case Progress.ERROR:
+                break;
+            case Progress.CONNECT_SUCCESS:
+                break;
+            case Progress.GET_INPUT_STREAM_SUCCESS:
+                break;
+            case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+                break;
+            case Progress.PROCESS_INPUT_STREAM_SUCCESS:
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        downloading = false;
+        if (networkFragment != null) {
+            networkFragment.cancelDownload();
+        }
     }
 
     /**
