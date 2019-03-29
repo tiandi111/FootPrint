@@ -65,6 +65,7 @@ public class Maps_Activity extends AppCompatActivity
     private FusedLocationProviderClient mFusedLocationClient;
 
     private float zoom = 15;
+
     private boolean downloading = false;
 
     private static final String TAG = "Maps_Activity";
@@ -101,6 +102,7 @@ public class Maps_Activity extends AppCompatActivity
         broadCastReciverInit( LocalBroadcastManager.getInstance(this) );
 
         networkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "http://3.87.45.142:8080/");
+
     }
 
     @Override
@@ -289,6 +291,7 @@ public class Maps_Activity extends AppCompatActivity
     private void connected() {
         // Play a playlist
         //mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX7K31D69s4M1");
+
         // Subscribe to PlayerState
         mSpotifyAppRemote.getPlayerApi()
                 .subscribeToPlayerState()
@@ -350,6 +353,7 @@ public class Maps_Activity extends AppCompatActivity
                 currentFragment = Addfootprint_Fragment.newInstance(snippet);
                 getSupportFragmentManager().beginTransaction().add(R.id.map, currentFragment).commit();
                 startDownload();
+
                 //startActivity(intent);
             }
         });

@@ -20,8 +20,8 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
-import com.example.lockdown.tools.location;
 
+import com.example.lockdown.tools.location;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -48,18 +48,21 @@ public class LocationMonitoring_Service extends IntentService implements Executo
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(LocationMonitoring_Service.this);
             while(true) {
                 Thread.sleep(5000);
+
                 if(mFusedLocationClient!=null) {
                     mFusedLocationClient.getLastLocation()
                             .addOnSuccessListener(LocationMonitoring_Service.this, new OnSuccessListener<Location>() {
                                 @Override
+
                                 public void onSuccess(Location newlocation) {
                                     if (newlocation != null) {
                                         Log.d(TAG, "Lat:" + newlocation.getLatitude() + ", Lng" + newlocation.getLongitude() );
                                         location cur_location = new location(newlocation.getLatitude(), newlocation.getLongitude());
                                         dist = cur_location.computeDistanceTo(testpoint);
-                                        Log.d(TAG, "Current distance is: " + dist + " .");
-                                        if(dist < 0)
+                                        Log.d(TAG, "Current distance is: " + dist + ".");
+                                        if(dist < 30000000)
                                             sendPlayMusicMessage();
+
                                     }
                                 }
                             });
@@ -75,6 +78,7 @@ public class LocationMonitoring_Service extends IntentService implements Executo
         Intent localIntent = new Intent();
         localIntent.setAction("Music auto-play");
         localIntent.putExtra("Distance","Distance to Zach282B is: " + dist + " .");
+
         localBroadcastManager.sendBroadcast(localIntent);
         Log.d(TAG, "Auto-play!");
     }

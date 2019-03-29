@@ -15,7 +15,8 @@ public interface FootprintDao {
     List<Footprint> loadAllIdAndTitle();
 
     @Query("select * from Footprint where id = :id")
-    Footprint loadFpById(int id);
+
+    Footprint loadFpById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFootprint(Footprint footprint);
@@ -25,5 +26,8 @@ public interface FootprintDao {
 
     @Query("update Footprint set title = :title where id = :id")
     void updateTitleById(String title, int id);
+
+    @Query("SELECT MAX(id) from Footprint LIMIT 1")
+    long getMaxId();
 
 }

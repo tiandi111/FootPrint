@@ -11,9 +11,10 @@ public class Footprint {
 
     @PrimaryKey
     @NonNull
-    public String id;
 
-    public Location address;
+    public long id;
+
+    public String address;
 
     public String title;
 
@@ -21,10 +22,10 @@ public class Footprint {
 
     public String user;
 
-    public Music music;
+    public String music;
 
-    public Pic picture;
+    public String picture;
 
-    public Video video;
+    public String video;
 
 }

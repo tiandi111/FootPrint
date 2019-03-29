@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.lockdown.database.AppDatabase;
+import com.example.lockdown.database.DataInitializer;
+
 public class Yourfootprint_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class Yourfootprint_Activity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+
+
+        DataInitializer.init(AppDatabase.getInstance(getApplicationContext()));
     }
     // Set bottom navigation bar
     private void bottom_nav_init() {
