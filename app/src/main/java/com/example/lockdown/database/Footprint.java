@@ -3,7 +3,6 @@ package com.example.lockdown.database;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-import android.location.Location;
 
 
 @Entity
@@ -11,9 +10,9 @@ public class Footprint {
 
     @PrimaryKey
     @NonNull
-    public String id;
+    public long id;
 
-    public Location address;
+    public String address;
 
     public String title;
 
@@ -21,10 +20,10 @@ public class Footprint {
 
     public String user;
 
-    public Music music;
+    public String music;
 
-    public Pic picture;
+    public String picture;
 
-    public Video video;
+    public String video;
 
 }

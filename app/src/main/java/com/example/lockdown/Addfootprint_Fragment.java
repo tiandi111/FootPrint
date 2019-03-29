@@ -20,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lockdown.database.AppDatabase;
+import com.example.lockdown.database.DataInitializer;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -38,6 +41,7 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
 
     private OnFragmentInteractionListener mListener;
 
+    private AppDatabase db;
 
     /**
      * Use this factory method to create a new instance of
@@ -61,6 +65,7 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
         if (getArguments() != null) {
             ADDRESS = getArguments().getString(ADD_DEFAULT);
         }
+        db = AppDatabase.getInstance(context);
     }
 
     @Override
@@ -130,6 +135,8 @@ public class Addfootprint_Fragment extends Fragment implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // TODO: jump to next activity
+                                DataInitializer.addFootprint(db, addEdit.getText().toString());
+                                Toast.makeText(context, "FootPrint NO." + db.fpModel().getMaxId() + " " + addEdit.getText().toString() + " is added", Toast.LENGTH_LONG).show();
                             }
 
                         });
