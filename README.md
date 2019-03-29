@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-@ https://github.com/tiandi111/FootPrint
->>>>>>> 7dfad249496b4f0b85db8e491bb2c69f3def3f8a
 Welcome to FootPrint!<br />
 -----------------------------------------------
 This is a personal android project supported by a software team from Texas A&M University.
