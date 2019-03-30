@@ -60,7 +60,7 @@ public class LocationMonitoring_Service extends IntentService implements Executo
                                         location cur_location = new location(newlocation.getLatitude(), newlocation.getLongitude());
                                         dist = cur_location.computeDistanceTo(testpoint);
                                         Log.d(TAG, "Current distance is: " + dist + ".");
-                                        if(dist < 30000000)
+                                        if(dist < 0)
                                             sendPlayMusicMessage();
 
                                     }

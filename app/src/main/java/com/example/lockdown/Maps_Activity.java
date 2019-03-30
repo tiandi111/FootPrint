@@ -24,9 +24,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.lockdown.Service.LocationMonitoring_Service;
 import com.example.lockdown.network.DownloadCallback;
+import com.example.lockdown.network.NetworkRequestHandler;
 import com.example.lockdown.tools.CommonBroadCastReceiver;
 import com.example.lockdown.tools.FetchAddressTask;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,6 +58,8 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -59,14 +68,12 @@ public class Maps_Activity extends AppCompatActivity
         implements DownloadCallback, OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap;
-    private NetworkFragment networkFragment;
+
     private SpotifyAppRemote mSpotifyAppRemote;
     private CommonBroadCastReceiver commonBroadCastReceiver;
     private FusedLocationProviderClient mFusedLocationClient;
 
     private float zoom = 15;
-
-    private boolean downloading = false;
 
     private static final String TAG = "Maps_Activity";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
@@ -78,6 +85,12 @@ public class Maps_Activity extends AppCompatActivity
     public Marker currentMarker = null;
     public Addfootprint_Fragment currentFragment;
     public List<Marker> footprintList = null;
+
+    /*
+    **  Instances and variables for networking
+     */
+    private NetworkFragment networkFragment; // singleton for networkFragment
+    private boolean downloading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,6 +367,22 @@ public class Maps_Activity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().add(R.id.map, currentFragment).commit();
                 startDownload();
 
+                StringRequest stringRequest = new StringRequest
+                        (Request.Method.GET, "http://3.87.45.142:8080/", new Response.Listener<String>() {
+
+                            @Override
+                            public void onResponse(String response) {
+                                Log.d("NetRequest", response);
+                                Toast.makeText(Maps_Activity.this, response, Toast.LENGTH_SHORT );
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO: Handle error
+                                Log.d("NetRequest", error.toString());
+                            }
+                        });
+                NetworkRequestHandler.getInstance(Maps_Activity.this).addToRequestQueue(stringRequest);
                 //startActivity(intent);
             }
         });
@@ -389,7 +418,7 @@ public class Maps_Activity extends AppCompatActivity
     }
 
 
-    // Network
+    // Trigger to start download
     private void startDownload() {
         if (!downloading && networkFragment != null) {
             // Execute the async download
