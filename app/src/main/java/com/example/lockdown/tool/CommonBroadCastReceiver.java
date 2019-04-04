@@ -1,4 +1,4 @@
-package com.example.lockdown.tools;
+package com.example.lockdown.tool;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.client.CallResult;
 
 public class CommonBroadCastReceiver extends BroadcastReceiver {
     private SpotifyAppRemote mSpotifyAppRemote;

@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.lockdown.database.AppDatabase;
 import com.example.lockdown.database.DataInitializer;
@@ -17,15 +19,12 @@ public class Yourfootprint_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         String S =bundle.getString("Loc");
-        switch (S) {
-            case "Home":
-                setContentView(R.layout.activity_management);
-            case "Gym":
-                setContentView(R.layout.activity_management_gym);
-            case "Library":
-                setContentView(R.layout.activity_management);
-        }
+
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setContentView(R.layout.activity_management);
+        customizedTitle_init();
         bottom_nav_init();
+
         ((Button) findViewById(R.id.ForYou))
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -60,5 +59,11 @@ public class Yourfootprint_Activity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void customizedTitle_init() {
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
+        TextView tv = (TextView) findViewById(R.id.title);
+        tv.setText("Footprint name");
     }
 }

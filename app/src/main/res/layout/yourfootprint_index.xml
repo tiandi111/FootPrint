@@ -11,18 +11,18 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="3dip">
-        <TextView
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:text="My Footprints"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:paddingTop="20dp"-->
+            <!--android:paddingBottom="20dp"-->
+            <!--android:id="@+id/textView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:text="My Footprints"-->
+            <!--android:textColor="@color/common_google_signin_btn_text_dark_default"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textStyle="bold" />-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

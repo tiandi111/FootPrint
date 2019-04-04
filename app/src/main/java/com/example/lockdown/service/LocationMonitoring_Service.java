@@ -1,28 +1,18 @@
-package com.example.lockdown.Service;
+package com.example.lockdown.service;
 
-import android.app.ActivityManager;
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.types.Track;
-import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationRequest;
-import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 
-import com.example.lockdown.tools.location;
-import java.util.List;
+import com.example.lockdown.tool.location;
+
 import java.util.concurrent.Executor;
 
 

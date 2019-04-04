@@ -1,4 +1,4 @@
-package com.example.lockdown.tools;
+package com.example.lockdown.tool;
 
 import android.content.Context;
 import android.location.Address;
@@ -7,11 +7,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.example.lockdown.R;
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
 
 import java.io.IOException;
 import java.util.ArrayList;

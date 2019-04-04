@@ -1,4 +1,4 @@
-package com.example.lockdown.tools;
+package com.example.lockdown.tool;
 
 import android.location.Location;
 

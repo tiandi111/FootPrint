@@ -1,4 +1,4 @@
-package com.example.lockdown;
+package com.example.lockdown.ui;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.example.lockdown.R;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 

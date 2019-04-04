@@ -7,15 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -29,16 +26,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.example.lockdown.Service.LocationMonitoring_Service;
+import com.example.lockdown.service.LocationMonitoring_Service;
 import com.example.lockdown.network.DownloadCallback;
 import com.example.lockdown.network.NetworkRequestHandler;
-import com.example.lockdown.tools.CommonBroadCastReceiver;
-import com.example.lockdown.tools.FetchAddressTask;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.lockdown.tool.CommonBroadCastReceiver;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,7 +42,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -58,63 +50,56 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
-import org.json.JSONObject;
-
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executor;
 
 public class Maps_Activity extends AppCompatActivity
         implements DownloadCallback, OnMapReadyCallback, Addfootprint_Fragment.OnFragmentInteractionListener {
 
+    // Map
     private GoogleMap mMap;
-
-    private SpotifyAppRemote mSpotifyAppRemote;
-    private CommonBroadCastReceiver commonBroadCastReceiver;
-    private FusedLocationProviderClient mFusedLocationClient;
-
-    private float zoom = 15;
-
     private static final String TAG = "Maps_Activity";
+    public Marker currentMarker = null;
+    public Addfootprint_Fragment currentFragment;
+    private FusedLocationProviderClient mFusedLocationClient;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CODE = 1337;
+    private float zoom = 15;
 
+    // Spotify
+    private SpotifyAppRemote mSpotifyAppRemote;
     private static final String CLIENT_ID = "954bf3f438c04897af73f0209a741c8a";
     private static final String REDIRECT_URI = "testschema://callback";
 
-    public Marker currentMarker = null;
-    public Addfootprint_Fragment currentFragment;
-    public List<Marker> footprintList = null;
+    // BroadCastReceiver for receiving location info
+    private CommonBroadCastReceiver commonBroadCastReceiver;
 
-    /*
-    **  Instances and variables for networking
-     */
-    private NetworkFragment networkFragment; // singleton for networkFragment
+    //  Networking
+    private Network_Fragment networkFragment; // singleton for networkFragment
     private boolean downloading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // The correct order to call functions below is:
+        // requestWindowFeature -> setContentView -> ..._init(basic UI elements)
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
         setContentView(R.layout.activity_maps);
 
         customizedTitle_init();
+        bottom_navigation_init();
 
         setGoogleMapFragment();
 
         AuthenticationForSpotify();
-
         ConnectToSpotify();
 
-        bottom_navigation_init();
-
         LocationMonitoringService_init(Maps_Activity.this);
-
         broadCastReciverInit( LocalBroadcastManager.getInstance(this) );
 
-        networkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "http://3.87.45.142:8080/");
+        networkFragment = Network_Fragment.getInstance(getSupportFragmentManager(), "http://3.87.45.142:8080/");
 
     }
 
@@ -159,7 +144,7 @@ public class Maps_Activity extends AppCompatActivity
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * we just add a marker near College Station, Texas
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -185,7 +170,7 @@ public class Maps_Activity extends AppCompatActivity
 
         // Add a marker in LockDown and move the camera
         LatLng LockDown = new LatLng(30.58757, -96.33633);
-        mMap.addMarker(new MarkerOptions().position(LockDown).title("Marker of LockDown"));
+        mMap.addMarker(new MarkerOptions().position(LockDown).title("Hometown"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LockDown, zoom));
         setMapLongClick(mMap);
         setPoiClick(mMap);
@@ -214,14 +199,14 @@ public class Maps_Activity extends AppCompatActivity
 
     public void LocationMonitoringService_init(Context context) {
         if(isServiceRunning("LocationMonitoringThread")) {
-            Log.i("服务正在运行","return");
+            Log.i("Service is running!","return");
             return;
         }
         Intent location_monitoring_intent = new Intent(context, LocationMonitoring_Service.class);
         startService(location_monitoring_intent);
     }
 
-    private void customizedTitle_init() {
+    public void customizedTitle_init() {
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
         TextView tv = (TextView) findViewById(R.id.title);
         tv.setText("Map");
@@ -258,12 +243,13 @@ public class Maps_Activity extends AppCompatActivity
                         mSpotifyAppRemote = spotifyAppRemote;
                         Log.d("SpotifyRemoteConnection", "Connected! Yay!");
                         // Do what we want spotify to do after connecting
+                        // Write code in connected()
                         connected();
                     }
 
                     @Override
                     public void onFailure(Throwable throwable) {
-                        Log.e("SpotifyRemoteConnection", throwable.getMessage() + "错误", throwable);
+                        Log.e("SpotifyRemoteConnection", throwable.getMessage(), throwable);
                     }
                 });
     }

@@ -51,5 +51,4 @@ dependencies {
 
     // Network
     implementation 'com.android.volley:volley:1.1.1'
-
 }

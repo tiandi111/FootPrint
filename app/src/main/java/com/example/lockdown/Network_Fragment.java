@@ -27,8 +27,8 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Implementation of headless Fragment that runs an AsyncTask to fetch data from the network.
  */
-public class NetworkFragment extends Fragment {
-    public static final String TAG = "NetworkFragment";
+public class Network_Fragment extends Fragment {
+    public static final String TAG = "Network_Fragment";
 
     private static final String URL_KEY = "UrlKey";
 
@@ -36,15 +36,15 @@ public class NetworkFragment extends Fragment {
     private DownloadTask downloadTask;
     private String urlString;
 
-    public static NetworkFragment getInstance(FragmentManager fragmentManager, String url) {
-        // Recover NetworkFragment in case we are re-creating the Activity due to a config change.
-        // This is necessary because NetworkFragment might have a task that began running before
+    public static Network_Fragment getInstance(FragmentManager fragmentManager, String url) {
+        // Recover Network_Fragment in case we are re-creating the Activity due to a config change.
+        // This is necessary because Network_Fragment might have a task that began running before
         // the config change occurred and has not finished yet.
-        // The NetworkFragment is recoverable because it calls setRetainInstance(true).
-        NetworkFragment networkFragment = (NetworkFragment) fragmentManager
-                .findFragmentByTag(NetworkFragment.TAG);
+        // The Network_Fragment is recoverable because it calls setRetainInstance(true).
+        Network_Fragment networkFragment = (Network_Fragment) fragmentManager
+                .findFragmentByTag(Network_Fragment.TAG);
         if (networkFragment == null) {
-            networkFragment = new NetworkFragment();
+            networkFragment = new Network_Fragment();
             Bundle args = new Bundle();
             args.putString(URL_KEY, url);
             networkFragment.setArguments(args);

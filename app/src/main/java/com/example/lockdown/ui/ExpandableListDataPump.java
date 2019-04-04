@@ -1,4 +1,4 @@
-package com.example.lockdown;
+package com.example.lockdown.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,9 +26,10 @@ public class ExpandableListDataPump {
         fp3.add("Words");
         fp3.add("...");
 
-        expandableListDetail.put("Home", fp1);
+        expandableListDetail.put("OK", fp1);
         expandableListDetail.put("Library", fp2);
         expandableListDetail.put("Gym", fp3);
+        expandableListDetail.put("cnm", new ArrayList());
         return expandableListDetail;
     }
 }

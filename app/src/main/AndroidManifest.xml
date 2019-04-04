@@ -53,11 +53,11 @@
         </activity>
 
         <service
-            android:name=".Service.LocationMonitoring_Service"
+            android:name=".service.LocationMonitoring_Service"
             android:exported="false">
         </service>
 
-        <receiver android:name=".tools.CommonBroadCastReceiver"  android:exported="true">
+        <receiver android:name=".tool.CommonBroadCastReceiver"  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />

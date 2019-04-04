@@ -5,10 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+
+import com.example.lockdown.ui.CustomExpandableListAdapter;
+import com.example.lockdown.ui.ExpandableListDataPump;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +27,13 @@ public class Yourfootprint_Index extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.yourfootprint_index);
+
+        customizedTitle_init();
         bottom_nav_init();
+
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         expandableListDetail = ExpandableListDataPump.getData();
         expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
@@ -92,4 +103,11 @@ public class Yourfootprint_Index extends AppCompatActivity {
         });
         bottomNV.setSelectedItemId(R.id.navigation_yourfootprint);
     }
+
+    public void customizedTitle_init() {
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
+        TextView tv = (TextView) findViewById(R.id.title);
+        tv.setText("My Footprints");
+    }
+
 }
