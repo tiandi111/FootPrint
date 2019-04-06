@@ -63,6 +63,7 @@ public class Yourfootprint_Index extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Intent intent_toAct = new Intent(Yourfootprint_Index.this, Yourfootprint_Activity.class);
+                Intent intent_toMusicIndex = new Intent(Yourfootprint_Index.this, Music_Index.class);
                 intent_toAct.putExtra("Loc", expandableListTitle.get(groupPosition));
                 Toast.makeText(
                         getApplicationContext(),
@@ -75,6 +76,9 @@ public class Yourfootprint_Index extends AppCompatActivity {
                 switch ( expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition)) {
                     case "...":
                         startActivity(intent_toAct);
+                        return true;
+                    case "Music":
+                        startActivity(intent_toMusicIndex);
                         return true;
                 }
                 return false;

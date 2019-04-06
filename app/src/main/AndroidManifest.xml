@@ -52,6 +52,10 @@
             android:name=".Yourfootprint_Index">
         </activity>
 
+        <activity
+            android:name=".Music_Index">
+        </activity>
+
         <service
             android:name=".service.LocationMonitoring_Service"
             android:exported="false">
