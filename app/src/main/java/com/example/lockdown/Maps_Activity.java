@@ -258,6 +258,7 @@ public class Maps_Activity extends AppCompatActivity
 
     private void bottom_navigation_init() {
         Intent intent_toInd = new Intent(Maps_Activity.this, Yourfootprint_Index.class);
+        Intent intentExplore = new Intent(Maps_Activity.this, ShowFootprintTest.class);
         BottomNavigationView bottomNV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -266,6 +267,7 @@ public class Maps_Activity extends AppCompatActivity
                     case R.id.navigation_map:
                         return true;
                     case R.id.navigation_explore:
+                        startActivity(intentExplore);
                         return true;
                     case R.id.navigation_yourfootprint:
                         startActivity(intent_toInd);
