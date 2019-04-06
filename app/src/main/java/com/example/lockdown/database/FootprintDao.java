@@ -1,5 +1,6 @@
 package com.example.lockdown.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -15,7 +16,6 @@ public interface FootprintDao {
     List<Footprint> loadAllIdAndTitle();
 
     @Query("select * from Footprint where id = :id")
-
     Footprint loadFpById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,5 +29,9 @@ public interface FootprintDao {
 
     @Query("SELECT MAX(id) from Footprint LIMIT 1")
     long getMaxId();
+
+    // R
+    @Query("SELECT * FROM Footprint")
+    LiveData<List<Footprint>> findAllFootprints();
 
 }

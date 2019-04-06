@@ -49,6 +49,10 @@
         </activity>
 
         <activity
+            android:name=".ShowFootprintTest">
+        </activity>
+
+        <activity
             android:name=".Yourfootprint_Index">
         </activity>
 
